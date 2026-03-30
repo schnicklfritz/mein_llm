@@ -2,6 +2,9 @@ FROM nvidia/cuda:13.2.0-runtime-ubuntu24.04
 
 # ── System deps ───────────────────────────────────────────────────────────────
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    zstd \
+    netcat-openbsd \
+    nano \
     curl \
     ca-certificates \
     python3 \
