@@ -1,0 +1,44 @@
+# Git
+.git/
+.gitignore
+
+# CI
+.github/
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Secrets / env
+.env
+.env.*
+*.key
+*.pem
+secrets/
+
+# Local data (never bake into image)
+chroma_data/
+models/
+*.gguf
+*.bin
+*.safetensors
+*.db
+*.sqlite3
+
+# Logs
+*.log
+logs/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Docs
+*.md
+LICENSE
