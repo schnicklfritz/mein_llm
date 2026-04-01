@@ -3,6 +3,7 @@ FROM nvidia/cuda:13.2.0-runtime-ubuntu24.04
 # ── System deps ───────────────────────────────────────────────────────────────
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
+    git aria2 rclone pigz unzip \
     ca-certificates \
     python3 \
     python3-pip \
@@ -12,6 +13,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     netcat-openbsd \
     nano \
     && rm -rf /var/lib/apt/lists/*
+
+# Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+# Rclone
+RUN curl -fsSL https://rclone.org/install.sh | bash    
 
 # ── Ollama ────────────────────────────────────────────────────────────────────
 RUN curl -fsSL https://ollama.com/install.sh | sh
