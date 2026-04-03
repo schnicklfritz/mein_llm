@@ -20,7 +20,12 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && rm -rf /var/lib/apt/lists/*
 
 # Rclone
-RUN curl -fsSL https://rclone.org/install.sh | bash    
+RUN curl -fsSL https://rclone.org/install.sh | bash
+
+# Uv
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
+    && ln -s /root/.local/bin/uv /usr/local/bin/uv \
+    && ln -s /root/.local/bin/uvx /usr/local/bin/uvx    
 
 # ── Ollama ────────────────────────────────────────────────────────────────────
 RUN curl -fsSL https://ollama.com/install.sh | sh
@@ -34,11 +39,14 @@ COPY scripts/ /scripts/
 
 COPY supervisor/ /etc/supervisor/conf.d/
 
+COPY scripts/pre_start.sh /pre_start.sh
+RUN chmod +x /pre_start.sh
+
 # ── Ports ─────────────────────────────────────────────────────────────────────
 # 11434 = Ollama
 # 8000  = ChromaDB
 # 3000  = MCP server
-EXPOSE 11434 8000 3000
+EXPOSE 11434 8000 3000 8080 8001
 
 # ── Runtime env ───────────────────────────────────────────────────────────────
 ENV OLLAMA_HOST=0.0.0.0:11434 \
@@ -54,4 +62,5 @@ ENV OLLAMA_HOST=0.0.0.0:11434 \
     OPENWEBUI_PORT=8080 \
     OLLAMA_BASE_URL="http://localhost:11434"
 
-ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+ENTRYPOINT ["/bin/bash", "-c", "/pre_start.sh && /usr/bin/supervisord -c /etc/supervisor/supervisord.conf"]
+
